@@ -1,10 +1,58 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Название веб-страницы</title>
-  </head>
-  <body>
-        
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Калькулятор</title>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="expression" class="display">
+    <button onclick="addToExpression('1')">1</button>
+    <button onclick="addToExpression('2')">2</button>
+    <button onclick="addToExpression('3')">3</button>
+    <button onclick="addToExpression('+')">+</button>
+    <button onclick="addToExpression('4')">4</button>
+    <button onclick="addToExpression('5')">5</button>
+    <button onclick="addToExpression('6')">6</button>
+    <button onclick="addToExpression('-')">-</button>
+    <button onclick="addToExpression('7')">7</button>
+    <button onclick="addToExpression('8')">8</button>
+    <button onclick="addToExpression('9')">9</button>
+    <button onclick="addToExpression('*')">*</button>
+    <button onclick="addToExpression('0')">0</button>
+    <button onclick="addToExpression('/')">/</button>
+    <button onclick="clearExpression()">C</button>
+    <button onclick="sendExpression()">=</button>
+  </div>
+
+  <script>
+    function addToExpression(value) {
+      document.getElementById('expression').value += value;
+    }
+
+    function clearExpression() {
+      document.getElementById('expression').value = '';
+    }
+
+    function sendExpression() {
+      let expression = document.getElementById('expression').value;
+      fetch('http://127.0.0.1:8000/calculate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ expression: expression })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('expression').value = data.result;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</body>
 </html>
